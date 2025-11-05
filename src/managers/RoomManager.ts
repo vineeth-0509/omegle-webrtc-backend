@@ -274,7 +274,7 @@ export class RoomManager {
     user2.socket.emit("room-ready", {roomId});
     setTimeout(()=>{
       user1.socket.emit("send-offer", {roomId});
-    })
+    }, 100)
     return roomId;
   }
   
