@@ -270,8 +270,11 @@ export class RoomManager {
     console.log(
       `created room ${roomId} for ${user1.socket.id} and ${user2.socket.id}`
     );
-    user1.socket.emit("send-offer", {roomId});
+    user1.socket.emit("room-ready", {roomId});
     user2.socket.emit("room-ready", {roomId});
+    setTimeout(()=>{
+      user1.socket.emit("send-offer", {roomId});
+    })
     return roomId;
   }
   
@@ -284,7 +287,11 @@ export class RoomManager {
     }
     const receiverUser = room.user1.socket.id === senderSocketId ? room.user2 :  room.user1;
     console.log(`sending offer to ${receiverUser.socket.id} `)
-    receiverUser.socket.emit("offer",{sdp, roomId}); 
+    setTimeout(()=>{
+       receiverUser.socket.emit("offer",{sdp, roomId});
+       console.log(`offer sent to ${receiverUser.socket.id}`)
+    },100)
+    
   }
 
   onAnswer(roomId: string, sdp: string, senderSocketId: string){
@@ -296,7 +303,11 @@ export class RoomManager {
     }
     const receivingUser = room.user1.socket.id === senderSocketId ? room.user2 : room.user1;
     console.log(`sending answer to ${receivingUser.socket.id}`)
-    receivingUser.socket.emit("answer", {sdp, roomId});
+    setTimeout(()=>{
+       receivingUser.socket.emit("answer", {sdp, roomId});
+       console.log(`answer received to ${receivingUser.socket.id}`);
+    },100)
+   
   }
 
   onIceCandidate(roomId: string, senderSocketId: string, candidate: any){
