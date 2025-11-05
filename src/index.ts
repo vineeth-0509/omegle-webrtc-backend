@@ -9,7 +9,8 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*"
+    origin: ["https://vinetalk.vercel.app", "http://localhost:5173"],
+    methods: ["GET", "POST"],
   },
 });
 
@@ -20,7 +21,7 @@ io.on("connection", (socket: Socket) => {
   console.log(`a user connected: ${name}`);
   userManager.addUser(name || "anonymous", socket);
   socket.on("disconnect", () => {
-  console.log("disconnected from :",socket.id, socket.data?.username);
+    console.log("disconnected from :", socket.id, socket.data?.username);
     userManager.removeUser(socket.id);
   });
 });
